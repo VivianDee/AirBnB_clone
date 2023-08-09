@@ -25,9 +25,11 @@ class BaseModel:
                 if key == 'id':
                     self.id = str(value)
                 elif key == 'updated_at':
-                    self.updated_at = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+                    self.updated_at = datetime.strptime(
+                        value, '%Y-%m-%dT%H:%M:%S.%f')
                 elif key == 'created_at':
-                    self.created_at = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+                    self.created_at = datetime.strptime(
+                        value, '%Y-%m-%dT%H:%M:%S.%f')
                 elif key == '__class__':
                     pass
                 else:
@@ -40,7 +42,14 @@ class BaseModel:
 
     def __str__(self):
         """Returns the string representation of the class"""
-        return "[{}] ({}) {}".format(__class__.__name__, self.id, self.__dict__)
+        return "[{}] ({}) {}".format(
+            __class__.__name__, self.id, self.__dict__)
+
+    def __repr__(self):
+        """Returns the string representation of the class"""
+        dictionary = self.__dict__
+        dictionary["__class__"] = __class__.__name__
+        return dictionary
 
     def save(self):
         """Updates the public instance attribute: updated_at"""
@@ -52,6 +61,7 @@ class BaseModel:
         dic_rep = self.__dict__
         dic_rep["__class__"] = __class__.__name__
         for key, value in dic_rep.items():
-            if key in ['updated_at', 'created_at']:
+            if key in ['updated_at', 'created_at'] and type(
+                    dic_rep[key]) is not str:
                 dic_rep[key] = value.strftime("%Y-%m-%dT%H:%M:%S.%f")
         return dic_rep
