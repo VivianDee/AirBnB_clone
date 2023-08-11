@@ -4,15 +4,22 @@ import cmd
 import sys
 import json
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.review import Review
+from models.amenity import Amenity
+from models.place import Place
 from models.__init__ import storage
+
 
 class HBNBCommand(cmd.Cmd):
     """Simple hbnb command interpreter"""
 
-
     prompt = "(hbnb) "
     __my_models = {}
-    __classes = ['BaseModel']
+    __classes = ['BaseModel', 'User',
+                 'Place', 'State', 'City', 'Amenity', 'Review']
 
     def precmd(self, arg):
         """stores all object instance in list my_models"""
@@ -35,7 +42,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """Creates a new instance of BaseModel"""
-        arg1 = arg.split( )
+        arg1 = arg.split()
         if len(arg1) <= 0:
             print("** class name missing **")
         elif arg1[0] not in self.__classes:
@@ -43,6 +50,18 @@ class HBNBCommand(cmd.Cmd):
         else:
             if arg == 'BaseModel':
                 model = BaseModel()
+            elif arg == 'User':
+                model = User()
+            elif arg == 'Place':
+                model = Place()
+            elif arg == 'State':
+                model = State()
+            elif arg == 'City':
+                model = City()
+            elif arg == 'Amenity':
+                model = Amenity()
+            elif arg == 'Review':
+                model = Review()
             model.save()
             print(model.id)
             storage.reload()
@@ -58,7 +77,7 @@ class HBNBCommand(cmd.Cmd):
         """Delete an Instance"""
         result = self.check_args(arg)
         if result:
-            args = arg.split( )
+            args = arg.split()
             all_objs = storage.all()
             obj_key = args[0] + '.' + args[1]
             if obj_key in all_objs:
@@ -101,7 +120,7 @@ class HBNBCommand(cmd.Cmd):
     def check_args(self, arg):
         """Checks all arguments"""
         if arg:
-            info = arg.split( )
+            info = arg.split()
             check = 0
             count = len(self.__my_models)
             for key, model in self.__my_models.items():
@@ -123,6 +142,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class name missing **")
         return False
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

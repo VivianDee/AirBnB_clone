@@ -54,7 +54,7 @@ class BaseModel:
         if '__class__' in sorted_dict:
             del sorted_dict['__class__']
         return "[{}] ({}) {}".format(
-            __class__.__name__, self.id, sorted_dict)
+            self.__class__.__name__, self.id, sorted_dict)
 
     def __repr__(self):
         """Returns a string representation of the class"""
@@ -69,7 +69,7 @@ class BaseModel:
     def to_dict(self):
         """Returns a dictionary containing all keys and their values"""
         dic_rep = self.__dict__
-        dic_rep["__class__"] = __class__.__name__
+        dic_rep["__class__"] = self.__class__.__name__
         for key, value in dic_rep.items():
             if key in ['updated_at', 'created_at'] and type(
                     dic_rep[key]) is not str:

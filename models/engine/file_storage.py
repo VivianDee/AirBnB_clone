@@ -31,15 +31,34 @@ class FileStorage:
             copy[key] = dict(my_dict)
         with open(self.__file_path, mode='w', encoding="utf-8") as f:
             json.dump(copy, f)
-        
 
     def storage_import(self, result):
         """Imports the storge module"""
         from models import storage
         from models.base_model import BaseModel
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
+
         objects = {}
         for obj_id, obj_data in result.items():
-            obj = BaseModel(**obj_data)
+            if obj_id.startswith("BaseModel"):
+                obj = BaseModel(**obj_data)
+            elif obj_id.startswith("User"):
+                obj = User(**obj_data)
+            elif obj_id.startswith("Place"):
+                obj = Place(**obj_data)
+            elif obj_id.startswith("State"):
+                obj = State(**obj_data)
+            elif obj_id.startswith("City"):
+                obj = City(**obj_data)
+            elif obj_id.startswith("Amenity"):
+                obj = Amenity(**obj_data)
+            elif obj_id.startswith("Review"):
+                obj = Review(**obj_data)
             objects[obj_id] = obj
         return objects
 
