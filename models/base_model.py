@@ -42,14 +42,24 @@ class BaseModel:
 
     def __str__(self):
         """Returns the string representation of the class"""
+        sorted_dict = {k: self.__dict__[k] for k in sorted(self.__dict__)}
+        if 'updated_at' in sorted_dict and type(
+                sorted_dict['updated_at']) == str:
+            sorted_dict['updated_at'] = datetime.strptime(
+                sorted_dict['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
+        if 'created_at' in sorted_dict and type(
+                sorted_dict['created_at']) == str:
+            sorted_dict['created_at'] = datetime.strptime(
+                sorted_dict['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
+        if '__class__' in sorted_dict:
+            del sorted_dict['__class__']
         return "[{}] ({}) {}".format(
-            __class__.__name__, self.id, self.__dict__)
+            __class__.__name__, self.id, sorted_dict)
 
     def __repr__(self):
-        """Returns the string representation of the class"""
-        dictionary = self.__dict__
-        dictionary["__class__"] = __class__.__name__
-        return dictionary
+        """Returns a string representation of the class"""
+        return "[{}] ({}) {}".format(
+            __class__.__name__, self.id, self.__dict__)
 
     def save(self):
         """Updates the public instance attribute: updated_at"""

@@ -2,6 +2,7 @@
 """The FileStorage class"""
 
 import os
+import copy
 from datetime import datetime
 import json
 
@@ -26,17 +27,11 @@ class FileStorage:
         """Serializes __objects to the JSON file"""
         copy = {}
         for key, val in self.__objects.items():
-            obj_dict = val.to_dict()
-            copy[key] = dict(obj_dict)
-        for value in copy.values():
-            if 'updated_at' in value and type(value['updated_at']) != str:
-                value['updated_at'] = value[
-                    'updated_at'].strftime("%Y-%m-%dT%H:%M:%S.%f")
-            if 'created_at' in value and type(value['created_at']) != str:
-                value['created_at'] = value[
-                    'created_at'].strftime("%Y-%m-%dT%H:%M:%S.%f")
+            my_dict = val.to_dict()
+            copy[key] = dict(my_dict)
         with open(self.__file_path, mode='w', encoding="utf-8") as f:
             json.dump(copy, f)
+        
 
     def storage_import(self, result):
         """Imports the storge module"""
