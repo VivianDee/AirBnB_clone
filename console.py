@@ -25,6 +25,19 @@ class HBNBCommand(cmd.Cmd):
         """stores all object instance in list my_models"""
         storage.reload()
         self.__my_models = storage.all()
+        info = arg.split('.')
+        if info[0] in self.__classes and info[1] == 'all()':
+            self.all(info[0])
+            arg = ''
+        elif info[0] in self.__classes and info[1] == 'count()':
+            self.count(info[0])
+            arg = ''
+        elif info[0] in self.__classes and info[1].startswith("show("):
+            self.show(info[0], info[1])
+            arg = ''
+        elif info[0] in self.__classes and info[1].startswith("destroy("):
+            self.destroy(info[0], info[1])
+            arg = ''
         return arg
 
     def do_quit(self, arg):
@@ -142,6 +155,31 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class name missing **")
         return False
+
+    def all(self, arg):
+        """Retrieve all instances of a class"""
+        self.do_all(arg)
+
+    def count(self, arg):
+        """Retrieve the number of instances of a class"""
+        count = 0
+        for k, v in self.__my_models.items():
+            if k.startswith(arg):
+                count = count + 1
+        print(count)
+
+    def show(self, arg1, arg2):
+        """Retrieve an instance based on its ID"""
+        my_id = arg2[6:-2]
+        arg = ' '.join([str(arg1), my_id])
+        self.do_show(arg)
+
+    def destroy(self, arg1, arg2):
+        """Destroy an instance based on its id"""
+        my_id = arg2[9:-2]
+        arg = ' '.join([str(arg1), my_id])
+        print(arg)
+        self.do_destroy(arg)
 
 
 if __name__ == '__main__':
