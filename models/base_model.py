@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 """The BaseModel class"""
 
-
-from models import storage
 from uuid import uuid4
 from datetime import datetime
+import sys
+import os
+from models import storage
 
 
 class BaseModel:

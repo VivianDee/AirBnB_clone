@@ -34,7 +34,7 @@ class FileStorage:
 
     def storage_import(self, result):
         """Imports the storge module"""
-        from models import storage
+        from ..__init__ import storage
         from models.base_model import BaseModel
         from models.user import User
         from models.place import Place
