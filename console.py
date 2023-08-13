@@ -27,16 +27,17 @@ class HBNBCommand(cmd.Cmd):
         storage.reload()
         self.__my_models = storage.all()
         info = arg.split('.')
+        info_len = len(info)
         if info[0] in self.__classes and info[1] == 'all()':
             self.all(info[0])
             arg = ''
         elif info[0] in self.__classes and info[1] == 'count()':
             self.count(info[0])
             arg = ''
-        elif info[0] in self.__classes and info[1].startswith("show("):
+        elif info_len > 1 and info[1].startswith("show("):
             self.show(info[0], info[1])
             arg = ''
-        elif info[0] in self.__classes and info[1].startswith("destroy("):
+        elif info_len > 1 and info[1].startswith("destroy("):
             self.destroy(info[0], info[1])
             arg = ''
         return arg
@@ -125,9 +126,28 @@ class HBNBCommand(cmd.Cmd):
                 print("** value missing **")
                 return
             attr_name = args[2]
-            attr_value = args[3]
-            setattr(result, attr_name, attr_value)
+            attr_value = args[3][1:-1]
+            obj_data = result.to_dict()
+            obj_data[attr_name] = attr_value
+            self.do_destroy(f"{args[0]} {args[1]}")
+            obj = None
+            if args[0] == "BaseModel":
+                obj = BaseModel(**obj_data)
+            elif args[0] == "User":
+                obj = User(**obj_data)
+            elif args[0] == "Place":
+                obj = Place(**obj_data)
+            elif args[0] == "State":
+                obj = State(**obj_data)
+            elif args[0] == "City":
+                obj = City(**obj_data)
+            elif args[0] == "Amenity":
+                obj = Amenity(**obj_data)
+            elif args[0] == "Review":
+                obj = Review(**obj_data)
+            storage.new(result)
             result.save()
+            print(result)
             storage.reload()
             self.__my_models = storage.all()
 
@@ -171,15 +191,20 @@ class HBNBCommand(cmd.Cmd):
 
     def show(self, arg1, arg2):
         """Retrieve an instance based on its ID"""
-        my_id = arg2[6:-2]
+        input_string = arg2
+        start_index = input_string.find('"') + 1
+        end_index = input_string.find('"', start_index)
+        my_id  = input_string[start_index:end_index]
         arg = ' '.join([str(arg1), my_id])
         self.do_show(arg)
 
     def destroy(self, arg1, arg2):
         """Destroy an instance based on its id"""
-        my_id = arg2[9:-2]
+        input_string = arg2
+        start_index = input_string.find('"') + 1
+        end_index = input_string.find('"', start_index)
+        my_id  = input_string[start_index:end_index]
         arg = ' '.join([str(arg1), my_id])
-        print(arg)
         self.do_destroy(arg)
 
 
