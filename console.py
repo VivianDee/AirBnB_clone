@@ -3,7 +3,7 @@
 
 import cmd
 import sys
-import sys
+import inspect
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -138,6 +138,11 @@ class HBNBCommand(cmd.Cmd):
             info = arg.split()
             check = 0
             count = len(self.__my_models)
+            obj_key = info[0] + '.' + info[1]
+            if not sys.stdin.isatty(
+                    ) and obj_key not in self.__my_models.keys():
+                print("** no instance found **")
+                return
             for key, model in self.__my_models.items():
                 count = count - 1
                 my_key = key.split('.')
@@ -177,6 +182,9 @@ class HBNBCommand(cmd.Cmd):
         end_index = input_string.find('"', start_index)
         my_id = input_string[start_index:end_index]
         arg = ' '.join([str(arg1), my_id])
+        if arg1 in self.__classes and arg not in self.__my_models.keys():
+            print("** no instance found **")
+            return
         self.do_show(arg)
 
     def destroy(self, arg1, arg2):
@@ -186,6 +194,9 @@ class HBNBCommand(cmd.Cmd):
         end_index = input_string.find('"', start_index)
         my_id = input_string[start_index:end_index]
         arg = ' '.join([str(arg1), my_id])
+        if arg1 in self.__classes and arg not in self.__my_models.keys():
+            print("** no instance found **")
+            return
         self.do_destroy(arg)
 
 
