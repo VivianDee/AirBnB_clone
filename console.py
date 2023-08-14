@@ -184,7 +184,7 @@ class HBNBCommand(cmd.Cmd):
         input_string = arg2
         start_index = input_string.find('"') + 1
         end_index = input_string.find('"', start_index)
-        my_id x = input_string[start_index:end_index]
+        my_id = input_string[start_index:end_index]
         arg = ' '.join([str(arg1), my_id])
         self.do_destroy(arg)
 
