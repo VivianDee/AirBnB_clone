@@ -27,10 +27,9 @@ class FileStorage:
         """Serializes __objects to the JSON file"""
         copy = {}
         for key, val in self.__objects.items():
-            my_dict = val.to_dict()
-            copy[key] = dict(my_dict)
+            copy[key] = val.to_dict()
         with open(self.__file_path, mode='w', encoding="utf-8") as f:
-            json.dump(copy, f)
+            json.dump(copy, f, default=str)
 
     def storage_import(self, result):
         """Imports the storge module"""
@@ -65,6 +64,6 @@ class FileStorage:
     def reload(self):
         """Deserializes the JSON file to __objects"""
         if os.path.isfile(self.__file_path):
-            with open(self.__file_path, mode='r') as f:
+            with open(self.__file_path, mode='r', encoding="UTF-8") as f:
                 result = json.load(f)
             self.__objects = self.storage_import(result)
