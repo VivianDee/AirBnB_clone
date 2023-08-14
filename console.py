@@ -127,27 +127,8 @@ class HBNBCommand(cmd.Cmd):
                 return
             attr_name = args[2]
             attr_value = args[3][1:-1]
-            obj_data = result.to_dict()
-            obj_data[attr_name] = attr_value
-            self.do_destroy(f"{args[0]} {args[1]}")
-            obj = None
-            if args[0] == "BaseModel":
-                obj = BaseModel(**obj_data)
-            elif args[0] == "User":
-                obj = User(**obj_data)
-            elif args[0] == "Place":
-                obj = Place(**obj_data)
-            elif args[0] == "State":
-                obj = State(**obj_data)
-            elif args[0] == "City":
-                obj = City(**obj_data)
-            elif args[0] == "Amenity":
-                obj = Amenity(**obj_data)
-            elif args[0] == "Review":
-                obj = Review(**obj_data)
-            storage.new(result)
+            setattr(result, attr_name, attr_value)
             result.save()
-            print(result)
             storage.reload()
             self.__my_models = storage.all()
 
@@ -194,7 +175,7 @@ class HBNBCommand(cmd.Cmd):
         input_string = arg2
         start_index = input_string.find('"') + 1
         end_index = input_string.find('"', start_index)
-        my_id  = input_string[start_index:end_index]
+        my_id = input_string[start_index:end_index]
         arg = ' '.join([str(arg1), my_id])
         self.do_show(arg)
 
@@ -203,7 +184,7 @@ class HBNBCommand(cmd.Cmd):
         input_string = arg2
         start_index = input_string.find('"') + 1
         end_index = input_string.find('"', start_index)
-        my_id  = input_string[start_index:end_index]
+        my_id x = input_string[start_index:end_index]
         arg = ' '.join([str(arg1), my_id])
         self.do_destroy(arg)
 
