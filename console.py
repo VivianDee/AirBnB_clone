@@ -143,7 +143,7 @@ class HBNBCommand(cmd.Cmd):
                 my_key = key.split('.')
                 my_class = my_key[0]
                 my_id = my_key[1]
-                if my_class == info[0]:
+                if info[0] in self.__classes:
                     check = check + 1
                     if len(info) < 2:
                         print("** instance id missing **")
