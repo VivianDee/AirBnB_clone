@@ -26,11 +26,13 @@ class BaseModel:
                 if key == 'id':
                     self.id = str(value)
                 elif key == 'updated_at':
-                    self.updated_at = datetime.strptime(
+                    kwargs[key] = datetime.strptime(
                         value, '%Y-%m-%dT%H:%M:%S.%f')
+                    self.updated_at = kwargs[key]
                 elif key == 'created_at':
-                    self.created_at = datetime.strptime(
+                    kwargs[key] = datetime.strptime(
                         value, '%Y-%m-%dT%H:%M:%S.%f')
+                    self.created_at = kwargs[key]
                 elif key == '__class__':
                     pass
                 else:
