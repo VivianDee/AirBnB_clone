@@ -3,6 +3,7 @@
 
 import unittest
 from models.amenity import Amenity
+import os
 
 class TestAmenity(unittest.TestCase):
     def setUp(self):
@@ -10,10 +11,14 @@ class TestAmenity(unittest.TestCase):
 
     def tearDown(self):
         del self.amenity
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
 
     def test_attributes(self):
         self.assertTrue(hasattr(self.amenity, "name"))
-        # ... add more attribute checks ...
+        self.assertEqual(self.amenity.name, "")
 
 if __name__ == "__main__":
     unittest.main()
