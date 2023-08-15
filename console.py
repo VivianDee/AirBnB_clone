@@ -40,6 +40,9 @@ class HBNBCommand(cmd.Cmd):
         elif info_len > 1 and info[1].startswith("destroy("):
             self.destroy(info[0], info[1])
             arg = ''
+        elif info_len > 1 and info[1].startswith("update("):
+            self.update(info[0], info[1])
+            arg = ''
         return arg
 
     def do_quit(self, arg):
@@ -112,7 +115,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-    def do_update(self, arg):
+    def do_update(self, arg, check=False):
         """Update an instance attribute"""
         result = self.check_args(arg)
         if result:
@@ -125,12 +128,18 @@ class HBNBCommand(cmd.Cmd):
             if len(args) < 4:
                 print("** value missing **")
                 return
-            attr_name = args[2]
-            attr_value = args[3][1:-1]
+            attr_name = args[2].strip('"')
+            if not check and type(arg[3]) == str:
+                attr_value = args[3].strip('["')
+            elif check and type(arg[3]) == str:
+                attr_value = args[3].strip('"')
+            else:
+                attr_value = args[3]
+            if attr_value.isdigit():
+                attr_value = int(attr_value)
             setattr(result, attr_name, attr_value)
-            result.save()
-            storage.reload()
-            self.__my_models = storage.all()
+            storage.new(result)
+            storage.save()
 
     def check_args(self, arg):
         """Checks all arguments"""
@@ -192,6 +201,17 @@ class HBNBCommand(cmd.Cmd):
         my_id = input_string[start_index:end_index]
         arg = ' '.join([str(arg1), my_id])
         self.do_destroy(arg)
+
+    def update(self, arg1, arg2):
+        """Update an instance based on its id"""
+        input_string = arg2
+        attrs = input_string.split("(")[1].split(")")[0]
+        attr_list = [i.strip() for i in attrs.split(",")]
+        arg = arg1
+        for i in attr_list:
+            i = i.strip('"')
+            arg = ' '.join([str(arg), i])
+        self.do_update(arg, True)
 
 
 if __name__ == '__main__':
