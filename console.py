@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """The HBNBCommandLine class"""
 
+import ast
 import cmd
 import sys
 import inspect
@@ -12,6 +13,7 @@ from models.review import Review
 from models.amenity import Amenity
 from models.place import Place
 from models.__init__ import storage
+import re
 
 
 class HBNBCommand(cmd.Cmd):
@@ -39,6 +41,10 @@ class HBNBCommand(cmd.Cmd):
             arg = ''
         elif info_len > 1 and info[1].startswith("destroy("):
             self.destroy(info[0], info[1])
+            arg = ''
+        elif info_len > 1 and info[1].startswith(
+                "update(") and re.search('{', info[1]):
+            self.dic_update(info[0], info[1])
             arg = ''
         elif info_len > 1 and info[1].startswith("update("):
             self.update(info[0], info[1])
@@ -212,6 +218,19 @@ class HBNBCommand(cmd.Cmd):
             i = i.strip('"')
             arg = ' '.join([str(arg), i])
         self.do_update(arg, True)
+
+    def dic_update(self, arg1, arg2):
+        """Update an instance attribute using a dictionary"""
+        input_string = arg2
+        start_index = input_string.find('"') + 1
+        end_index = input_string.find('"', start_index)
+        my_id = input_string[start_index:end_index]
+        my_dict = arg2.split(',', 1)
+        my_dict = my_dict[1].strip(') ')
+        my_dict = ast.literal_eval(my_dict)
+        for key, value in my_dict.items():
+            arg = ' '.join([str(arg1), my_id, key, str(value)])
+            self.do_update(arg, True)
 
 
 if __name__ == '__main__':
