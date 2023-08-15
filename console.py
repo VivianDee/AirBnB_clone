@@ -138,10 +138,11 @@ class HBNBCommand(cmd.Cmd):
             info = arg.split()
             check = 0
             count = len(self.__my_models)
-            obj_key = info[0] + '.' + info[1]
-            if not sys.stdin.isatty(
-                    ) and obj_key not in self.__my_models.keys():
-                print("** no instance found **")
+            if count >= 2:
+                obj_key = info[0] + '.' + info[1]
+                if not sys.stdin.isatty(
+                        ) and obj_key not in self.__my_models.keys():
+                    print("** no instance found **")
                 return
             for key, model in self.__my_models.items():
                 count = count - 1
