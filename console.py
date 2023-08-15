@@ -182,9 +182,6 @@ class HBNBCommand(cmd.Cmd):
         end_index = input_string.find('"', start_index)
         my_id = input_string[start_index:end_index]
         arg = ' '.join([str(arg1), my_id])
-        if arg1 in self.__classes and arg not in self.__my_models.keys():
-            print("** no instance found **")
-            return
         self.do_show(arg)
 
     def destroy(self, arg1, arg2):
@@ -194,9 +191,6 @@ class HBNBCommand(cmd.Cmd):
         end_index = input_string.find('"', start_index)
         my_id = input_string[start_index:end_index]
         arg = ' '.join([str(arg1), my_id])
-        if arg1 in self.__classes and arg not in self.__my_models.keys():
-            print("** no instance found **")
-            return
         self.do_destroy(arg)
 
 
