@@ -134,16 +134,18 @@ class HBNBCommand(cmd.Cmd):
 
     def check_args(self, arg):
         """Checks all arguments"""
+        storage.reload()
+        self.__my_models = storage.all()
         if arg:
             info = arg.split()
             check = 0
             count = len(self.__my_models)
-            if count >= 2:
+            if count > 2:
                 obj_key = info[0] + '.' + info[1]
                 if not sys.stdin.isatty(
                         ) and obj_key not in self.__my_models.keys():
                     print("** no instance found **")
-                return
+                    return
             for key, model in self.__my_models.items():
                 count = count - 1
                 my_key = key.split('.')
