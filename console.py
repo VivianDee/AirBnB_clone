@@ -138,14 +138,11 @@ class HBNBCommand(cmd.Cmd):
         self.__my_models = storage.all()
         if arg:
             info = arg.split()
-            check = 0
             count = len(self.__my_models)
-            if count > 2:
-                obj_key = info[0] + '.' + info[1]
-                if not sys.stdin.isatty(
-                        ) and obj_key not in self.__my_models.keys():
-                    print("** no instance found **")
-                    return
+            check = 0
+            if count and info[0] not in self.__classes:
+                print("** class doesn't exist **")
+                return
             for key, model in self.__my_models.items():
                 count = count - 1
                 my_key = key.split('.')
@@ -161,7 +158,7 @@ class HBNBCommand(cmd.Cmd):
                     elif info[1] and count == 0:
                         print("** no instance found **")
             if check == 0:
-                print("** class doesn't exist **")
+                print("** no instance found **")
         else:
             print("** class name missing **")
         return False
